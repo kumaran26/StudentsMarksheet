@@ -1,0 +1,176 @@
+swagger: "2.0"
+info:
+  description: "This is a simple api to add, update, delete and get reports of the students marks"
+  version: "1.0.0"
+  title: "Swagger Students Marksheet"
+  contact:
+    email: "kumaran26skr@gmail.com"
+host: "localhost:3000"
+tags:
+- name: "Students Marksheet"
+  description: "Everything about student marks"
+  externalDocs:
+    description: "Find out more"
+    url: "https://github.com/kumaran26/"
+schemes:
+- "http"
+paths:
+  /add:
+    post:
+      tags:
+      - "Students Marksheet"
+      summary: "Add a new record to students object"
+      description: ""
+      operationId: "addStudent"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "student record that needs to be added to the students object"
+        required: true
+        schema:
+          $ref: "#/definitions/Record"
+      responses:
+        "400":
+          description: "Invalid Input"
+        "405":
+          description: "Invalid Marks"
+        "200":
+          description: "successful operation"
+  /update:
+    post:
+      tags:
+      - "Students Marksheet"
+      summary: "Updates an existing record in students object"
+      description: ""
+      operationId: "updateStudent"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Updates student record that is present in students object"
+        required: true
+        schema:
+          $ref: "#/definitions/FindRecord"
+      responses:
+        "400":
+          description: "Invalid Input"
+        "404":
+          description: "Not Found"
+        "200":
+          description: "successful operation"
+  /delete:
+    delete:
+      tags:
+      - "Students Marksheet"
+      summary: "Deletes an existing student record"
+      description: ""
+      operationId: "deleteStudent"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Updates student record that is present in students object"
+        required: true
+        schema:
+          $ref: "#/definitions/DeleteRecord"
+      responses:
+        "400":
+          description: "Invalid Input"
+        "404":
+          description: "Not Found"
+        "200":
+          description: "successful operation"
+  /report:
+    get:
+      tags:
+      - "Students Marksheet"
+      summary: "Get report of all the student records"
+      description: ""
+      operationId: "getReport"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Report"
+definitions:
+  Report:
+    type: "object"
+    properties:
+      studentID:
+        type: "object"
+        $ref: "#/definitions/Record"
+  DeleteRecord:
+    type: "object"
+    required:
+    - "studentID"
+    properties:
+      studentID:
+        type: "string"
+  FindRecord:
+    type: "object"
+    required:
+    - "studentID"
+    properties:
+      studentID:
+        type: "string"
+        example: "123"
+      subject1:
+        type: "string"
+        example: "56"
+      subject2:
+        type: "string"
+        example: "76"
+      subject3:
+        type: "string"
+        example: "87"
+      subject4:
+        type: "string"
+        example: "67"
+      subject5:
+        type: "string"
+        example: "98"
+  Record:
+    type: "object"
+    required:
+    - "studentID"
+    - "studentName"
+    - "subject1"
+    - "subject2"
+    - "subject3"
+    - "subject4"
+    - "subject5"
+    properties:
+      studentID:
+        type: "string"
+        example: "123"
+      studentName:
+        type: "string"
+        example: "Tom"
+      subject1:
+        type: "string"
+        example: "56"
+      subject2:
+        type: "string"
+        example: "76"
+      subject3:
+        type: "string"
+        example: "87"
+      subject4:
+        type: "string"
+        example: "67"
+      subject5:
+        type: "string"
+        example: "98"
