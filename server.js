@@ -94,8 +94,7 @@ fastify.post('/add', async (request) => {
 		return addStudent(request.body);
 });
 
-fastify.post('/update', async (request, reply) => {
-    console.log(request.body);
+fastify.post('/update', async (request) => {
      var error = validateInput('update', request.body);
      if(error)
          throw error;
@@ -103,14 +102,17 @@ fastify.post('/update', async (request, reply) => {
          return updateStudent(request.body);
  });
 
- fastify.delete('/delete', async (request, reply) => {
-	console.log(request.body);
+ fastify.delete('/delete', async (request) => {
 	var error = validateInput('delete', request.body);
 	if(error)
 		throw error;
 	else
 		return deleteStudent(request.body);
 });
+
+fastify.get('/report', async () => {
+    return students;
+ })
 
 const start = async () => {
     try {
