@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/kumaran26/StudentsMarksheet/issues"
   },
-  "homepage": "https://github.com/kumaran26/StudentsMarksheet#readme"
+  "homepage": "https://github.com/kumaran26/StudentsMarksheet#readme",
+  "dependencies": {
+    "fastify": "^3.18.1"
+  }
 }
