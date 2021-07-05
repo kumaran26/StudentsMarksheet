@@ -4,14 +4,17 @@ let students = {};
 
 const CODE = {
 	'INVALID_INPUT': 400,
-	'INVALID_MARKS': 405
+	'INVALID_MARKS': 405,
+    'NOT_FOUND': 404
 }
 
 const MESSAGE = {
 	'INVALID_INPUT': 'Invalid Request',
 	'INVALID_MARKS': 'Invalid Marks',
     'ADDED': 'Student Added',
-	'PRESENT': 'Student Record Already Present'
+	'PRESENT': 'Student Record Already Present',
+    'UPDATED': 'Student Updated',
+    'NOT_FOUND': 'Student Record Not Found'
 }
 
 const formErrorObject = (type) => {
@@ -36,6 +39,9 @@ const validateInput = (type, request) => {
 				return formErrorObject('INVALID_INPUT');
 			else if(!request.subject1 || !request.subject2 || !request.subject3 || !request.subject4 || !request.subject5)
 				return formErrorObject('INVALID_MARKS');
+        case 'update':
+            if(!request.studentID)
+                return formErrorObject('INVALID_INPUT');
 	}
 }
 
@@ -50,6 +56,21 @@ const addStudent = (student) => {
 	return response;
 }
 
+const updateStudent = (student) => {
+	let response = {};
+	if(students[student.studentID]){
+		students[student.studentID].subject1 = student.subject1 ? student.subject1 : students[student.studentID].subject1;
+		students[student.studentID].subject2 = student.subject2 ? student.subject2 : students[student.studentID].subject2;
+		students[student.studentID].subject3 = student.subject3 ? student.subject3 : students[student.studentID].subject3;
+		students[student.studentID].subject4 = student.subject4 ? student.subject4 : students[student.studentID].subject4;
+		students[student.studentID].subject5 = student.subject5 ? student.subject5 : students[student.studentID].subject5;
+		response = formResponseObject(student.studentID, 'UPDATED');
+	} else {
+		response = formResponseObject(student.studentID, 'NOT_FOUND');
+	}
+	return response;
+}
+
 fastify.post('/add', async (request) => {
 	var error = validateInput('add', request.body);
 	if(error)
@@ -57,6 +78,15 @@ fastify.post('/add', async (request) => {
 	else
 		return addStudent(request.body);
 });
+
+fastify.post('/update', async (request, reply) => {
+    console.log(request.body);
+     var error = validateInput('update', request.body);
+     if(error)
+         throw error;
+     else
+         return updateStudent(request.body);
+ });
 
 const start = async () => {
     try {
