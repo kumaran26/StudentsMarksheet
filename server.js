@@ -14,7 +14,8 @@ const MESSAGE = {
     'ADDED': 'Student Added',
 	'PRESENT': 'Student Record Already Present',
     'UPDATED': 'Student Updated',
-    'NOT_FOUND': 'Student Record Not Found'
+    'NOT_FOUND': 'Student Record Not Found',
+    'DELETED': 'Student Deleted'
 }
 
 const formErrorObject = (type) => {
@@ -40,6 +41,9 @@ const validateInput = (type, request) => {
 			else if(!request.subject1 || !request.subject2 || !request.subject3 || !request.subject4 || !request.subject5)
 				return formErrorObject('INVALID_MARKS');
         case 'update':
+            if(!request.studentID)
+                return formErrorObject('INVALID_INPUT');
+        case 'delete':
             if(!request.studentID)
                 return formErrorObject('INVALID_INPUT');
 	}
@@ -71,6 +75,17 @@ const updateStudent = (student) => {
 	return response;
 }
 
+const deleteStudent = (student) => {
+	let response = {};
+	if(students[student.studentID]){
+		delete students[student.studentID];
+		response = formResponseObject(student.studentID, 'DELETED');
+	} else {
+		response = formResponseObject(student.studentID, 'NOT_FOUND');
+	}
+	return response;
+}
+
 fastify.post('/add', async (request) => {
 	var error = validateInput('add', request.body);
 	if(error)
@@ -87,6 +102,15 @@ fastify.post('/update', async (request, reply) => {
      else
          return updateStudent(request.body);
  });
+
+ fastify.delete('/delete', async (request, reply) => {
+	console.log(request.body);
+	var error = validateInput('delete', request.body);
+	if(error)
+		throw error;
+	else
+		return deleteStudent(request.body);
+});
 
 const start = async () => {
     try {
